@@ -1,0 +1,11 @@
+CREATE TABLE restaurant (restaurantID INTEGER PRIMARY KEY AUTO_INCREMENT,  rname VARCHAR(255),  location VARCHAR(255), crating FLOAT, arating FLOAT, srating FLOAT);
+
+insert into restaurant (rname,location,crating,arating,srating) values ('Dominos Pizza','Leela Bhawan',            3.7  ,    4.1   ,   4.7 );
+ insert into restaurant (rname,location,crating,arating,srating) values   ( 'Gopal Sweets'          ,'Leela Bhawan'       ,     4.5   ,   4.2   ,   3.2 );
+ insert into restaurant (rname,location,crating,arating,srating) values   ( 'Boston Bites'          ,'Model Town'         ,     3.4   ,   4.9   ,   2.1 );
+ insert into restaurant (rname,location,crating,arating,srating) values   ( 'Gastro Eatery Hub'     ,'Leela Bhawan'       ,     4.5   ,   4.2   ,   4.3 );
+ insert into restaurant (rname,location,crating,arating,srating) values   ( 'Pizza Nation'          ,'Thapar University'  ,     1.1   ,   1.1   ,   4.9 );
+ insert into restaurant (rname,location,crating,arating,srating) values   ( 'KFC Patiala'           ,'Leela Bhawan'       ,     2.3   ,   4.4   ,   4.7 );
+ insert into restaurant (rname,location,crating,arating,srating) values   ( 'BunsNBunnies'          ,'SAT Complex'        ,     3.1   ,   4.4   ,   4.8 );
+ insert into restaurant (rname,location,crating,arating,srating) values   ( 'Subway'                ,'Leela Bhawan'       ,     4.9   ,   3.8   ,   2.1 );
+

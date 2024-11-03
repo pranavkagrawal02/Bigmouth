@@ -1,0 +1,6 @@
+DELETE FROM menu WHERE restaurantID = (SELECT restaurantID FROM restaurant WHERE location = 'Model Town' and rname = 'Boston Bites') AND foodID = (SELECT foodID FROM food WHERE item = 'Guava Smoothie');
+
+
+INSERT INTO menu (restaurantID, foodID, price)VALUES ((SELECT restaurantID FROM restaurant WHERE location = 'Model Town' and rname = 'Boston Bites'),(SELECT foodID FROM food WHERE item = 'Guava Smoothie'),109.99);
+
+

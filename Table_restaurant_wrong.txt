@@ -1,0 +1,7 @@
+CREATE TABLE restaurant ( restaurantId int NOT NULL AUTO_INCREMENT,  rname VARCHAR(255),  rating INT(2), location VARCHAR(255), PRIMARY KEY (restaurantId));
+
+
+
+
+insert into restaurant (rname,location, rating) values ('Domino Pizza','Leela Bhawan' ,4);
+insert into restaurant (rname,location, rating) values ('Gopal Sweets',  'Leela Bhawan',2);

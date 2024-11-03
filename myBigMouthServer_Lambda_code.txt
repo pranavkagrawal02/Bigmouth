@@ -1,0 +1,411 @@
+import json
+import mysql.connector
+#from mysql.connector.errors import ErrorCode
+
+print('Loading function')
+
+def validate_city(slots):
+    if not slots['Location']:
+        #print("Inside Empty Location")
+        return {
+        'isValid': False,
+        'violatedSlot': 'Location'
+        }    
+    return {'isValid': True}
+
+def validate_restaurant(slots):
+    if not slots['MenuLocation']:
+        #print("Inside Empty Location")
+        return {
+        'isValid': False,
+        'violatedSlot': 'MenuLocation'
+        }  
+    if not slots['Restaurant']:
+        #print("Inside Empty Location")
+        return {
+        'isValid': False,
+        'violatedSlot': 'Restaurant'
+        }    
+    return {'isValid': True}
+
+def validate_category(slots):
+    if not slots['RestLocation']:
+        return {
+        'isValid': False,
+        'violatedSlot': 'RestLocation'
+        }    
+    if not slots['RestName']:
+        return {
+        'isValid': False,
+        'violatedSlot': 'RestName'
+        } 
+    return {'isValid': True}
+
+def validate_delete_menu(slots):
+    if not slots['DeleteMenuLocation']:
+        return {
+        'isValid': False,
+        'violatedSlot': 'DeleteMenuLocation'
+        }    
+    if not slots['DeleteMenuRestaurant']:
+        return {
+        'isValid': False,
+        'violatedSlot': 'DeleteMenuRestaurant'
+        } 
+    if not slots['DeleteMenuItem']:
+        return {
+        'isValid': False,
+        'violatedSlot': 'DeleteMenuItem'
+        } 
+    return {'isValid': True}
+
+def validate_add_menu(slots):
+    if not slots['AddMenuLocation']:
+        return {
+        'isValid': False,
+        'violatedSlot': 'AddMenuLocation'
+        }    
+    if not slots['AddMenuRestaurant']:
+        return {
+        'isValid': False,
+        'violatedSlot': 'AddMenuRestaurant'
+        } 
+    if not slots['AddMenuItem']:
+        return {
+        'isValid': False,
+        'violatedSlot': 'AddMenuItem'
+        } 
+    if not slots['AddMenuItemPrice']:
+        return {
+        'isValid': False,
+        'violatedSlot': 'AddMenuItemPrice'
+        } 
+    return {'isValid': True}
+
+
+def lambda_handler(event, context):
+    slots = event['sessionState']['intent']['slots']
+    intent = event['sessionState']['intent']['name']
+    print(event['invocationSource'])
+    #intent = event['currentIntent']['name']
+    #slots = event['currentIntent']['slots']
+    
+    
+    print(slots)
+    print(intent)
+    
+    if event['invocationSource'] == 'DialogCodeHook':
+        if (intent == 'FindRestaurant'):
+            validated_city=validate_city(slots)
+            if not validated_city['isValid']:
+                response = {
+                    "sessionState": {
+                        "dialogAction": {
+                            "slotToElicit":validated_city['violatedSlot'],
+                            "type": "ElicitSlot"
+                            },
+                            "intent": {
+                                'name':intent,
+                                'slots': slots
+                                }
+                        }
+                    }
+                return response
+            else:
+                response = {
+                "sessionState": {
+                    "dialogAction": {
+                        "type": "Delegate"
+                        },
+                        "intent": {
+                            'name':intent,
+                            'slots': slots
+                            }
+                    }
+                }
+                return response
+                
+        elif (intent == 'ShowMenu'):
+            validated_restaurant=validate_restaurant(slots)
+            if not validated_restaurant['isValid']:
+                response = {
+                    "sessionState": {
+                        "dialogAction": {
+                            "slotToElicit":validated_restaurant['violatedSlot'],
+                            "type": "ElicitSlot"
+                            },
+                            "intent": {
+                                'name':intent,
+                                'slots': slots
+                                }
+                        }
+                    }
+                return response
+            else:
+                response = {
+                "sessionState": {
+                    "dialogAction": {
+                        "type": "Delegate"
+                        },
+                        "intent": {
+                            'name':intent,
+                            'slots': slots
+                            }
+                    }
+                }
+                return response
+        
+        elif (intent == 'RestaurantCategory'):
+            validated_category=validate_category(slots)
+            if not validated_category['isValid']:
+                response = {
+                    "sessionState": {
+                        "dialogAction": {
+                            "slotToElicit":validated_category['violatedSlot'],
+                            "type": "ElicitSlot"
+                            },
+                            "intent": {
+                                'name':intent,
+                                'slots': slots
+                                }
+                        }
+                    }
+                return response
+            else:
+                response = {
+                "sessionState": {
+                    "dialogAction": {
+                        "type": "Delegate"
+                        },
+                        "intent": {
+                            'name':intent,
+                            'slots': slots
+                            }
+                    }
+                }
+                return response
+        elif (intent == 'DeleteMenu'):
+            validated_delete_menu=validate_delete_menu(slots)
+            if not validated_delete_menu['isValid']:
+                response = {
+                    "sessionState": {
+                        "dialogAction": {
+                            "slotToElicit":validated_delete_menu['violatedSlot'],
+                            "type": "ElicitSlot"
+                            },
+                            "intent": {
+                                'name':intent,
+                                'slots': slots
+                                }
+                        }
+                    }
+                return response
+            else:
+                response = {
+                "sessionState": {
+                    "dialogAction": {
+                        "type": "Delegate"
+                        },
+                        "intent": {
+                            'name':intent,
+                            'slots': slots
+                            }
+                    }
+                }
+                return response
+        
+        elif (intent == 'AddMenu'):
+            validated_add_menu=validate_add_menu(slots)
+            if not validated_add_menu['isValid']:
+                response = {
+                    "sessionState": {
+                        "dialogAction": {
+                            "slotToElicit":validated_add_menu['violatedSlot'],
+                            "type": "ElicitSlot"
+                            },
+                            "intent": {
+                                'name':intent,
+                                'slots': slots
+                                }
+                        }
+                    }
+                return response
+            else:
+                response = {
+                "sessionState": {
+                    "dialogAction": {
+                        "type": "Delegate"
+                        },
+                        "intent": {
+                            'name':intent,
+                            'slots': slots
+                            }
+                    }
+                }
+                return response
+        elif (intent == 'ShowRestaurantLocations'):
+            response = {
+            "sessionState": {
+                "dialogAction": {
+                    "type": "Delegate"
+                    },
+                    "intent": {
+                        'name':intent,
+                        'slots': slots
+                        }
+                }
+            }
+            return response
+                
+   
+    
+    if event['invocationSource'] == 'FulfillmentCodeHook':
+        # Add order in Database
+        print("Retrieve City from the DB")
+        dataBase = mysql.connector.connect(user='pranav', password = 'Pranav#4567', database='bigmouth',
+                              host= '100.26.236.145',  auth_plugin = 'mysql_native_password')
+        
+        
+        cursorObject = dataBase.cursor()
+        if (intent == 'FindRestaurant'):
+            location = slots['Location']['value']['interpretedValue']
+            #forquery = " "+ location + " "
+            #input = (forquery,)
+            input = (location,)
+            query = "SELECT rname FROM restaurant where location= %s"
+            #cursorObject.execute(query, input)
+            #myresult = cursorObject.fetchall()
+        elif (intent == 'ShowMenu'):
+            restaurant = slots['Restaurant']['value']['interpretedValue']
+            #forquery = " "+ restaurant + " "
+            #input = (forquery,)
+            input = (restaurant,)
+            query = "SELECT item, price FROM restaurant , food , menu WHERE restaurant.restaurantID = menu.restaurantID AND menu.foodID = food.foodID AND restaurant.rname = %s"
+            #cursorObject.execute(query, input)
+            #myresult = cursorObject.fetchall()
+        elif (intent == 'RestaurantCategory'):
+            location = slots['RestLocation']['value']['interpretedValue']
+            restaurant = slots['RestName']['value']['interpretedValue']
+            #forquery1 = " "+ Location + " "
+            #forquery2 = " "+ restaurant + " "
+            #input = (forquery1,forquery2,)
+            #input = (location,restaurant,)
+            #query = "SELECT srating FROM restaurant where location= %s and rname=%s"
+            #myresult = cursorObject.execute(query, input)
+            #rating_to_categorize = cursorObject.fetchall()
+            #if cursorObject.rowcount != 0:
+                 #query = "SELECT rating FROM restaurant"
+                 #cursorObject.execute(query, input)
+                 #all_ratings = cursorObject.fetchall()
+                 #apply KNN
+        elif (intent == 'DeleteMenu'):
+            location = slots['DeleteMenuLocation']['value']['interpretedValue']
+            restaurant = slots['DeleteMenuRestaurant']['value']['interpretedValue']
+            item = slots['DeleteMenuItem']['value']['interpretedValue']
+            input = (location,restaurant,item,)
+            query = "DELETE FROM menu WHERE restaurantID = (SELECT restaurantID FROM restaurant WHERE location = %s and rname = %s) AND foodID = (SELECT foodID FROM food WHERE item = %s);"
+            #myresult = cursorObject.execute(query, input)
+        elif (intent == 'AddMenu'):
+            location = slots['AddMenuLocation']['value']['interpretedValue']
+            restaurant = slots['AddMenuRestaurant']['value']['interpretedValue']
+            item = slots['AddMenuItem']['value']['interpretedValue']
+            price = slots['AddMenuItemPrice']['value']['interpretedValue']
+            input = (location,restaurant,item,price,)
+            query = "INSERT INTO menu (restaurantID, foodID, price)VALUES ((SELECT restaurantID FROM restaurant WHERE location = %s and rname = %s),(SELECT foodID FROM food WHERE item = %s),%s);"
+            #myresult = cursorObject.execute(query, input)
+        elif (intent == 'ShowRestaurantLocations'):
+            input = ()
+            query = "Select DISTINCT location from restaurant;"
+            #myresult = cursorObject.execute(query, input)
+        
+        duplicateCounter = 0
+        otherErrors = 0
+        myresult = ' '
+        
+              
+        try:
+            cursorObject.execute(query, input)
+            if (intent == 'DeleteMenu') or (intent == 'AddMenu'):
+                dataBase.commit()
+            else:
+                myresult = cursorObject.fetchall()
+        except mysql.connector.Error as err:
+            #if err.errno  == ErrorCode.ER_DUP_ENTRY:
+            if err.errno  == 1062:
+                duplicateCounter += 1
+            else:
+                otherErrors += 1
+            
+        
+            
+        
+        dataBase.close()
+        
+        msg = " "
+        data = " "
+        
+        if (duplicateCounter == 0) and (otherErrors ==0):
+            #print("duplicateCounter", duplicateCounter)
+            if cursorObject.rowcount == 0:
+                msg = "invalid query. Please try again"
+            elif (intent == 'FindRestaurant'):
+                location=slots['Location']['value']['interpretedValue'] 
+                msg = "The Restaurants available at " + location + " are follows: "
+                for row in myresult:
+                    data = data + row[0] +"\n"
+                msg = msg + data
+            elif (intent == 'ShowMenu'):
+                restaurant = slots['Restaurant']['value']['interpretedValue']
+                msg = "The Menu of the Restaurant " + restaurant + " is follows: "
+                for row in myresult:
+                     data = data + row[0] + "   " + "Rs " + str(row[1]) +"\n"
+                     #data = data + row[0]
+                msg = msg + data
+            elif (intent == 'RestaurantCategory'):
+                for row in myresult:
+                    msg = "The rating is:" + str(row[0]) 
+            elif (intent == 'DeleteMenu'):
+                location=slots['DeleteMenuLocation']['value']['interpretedValue'] 
+                restaurant = slots['DeleteMenuRestaurant']['value']['interpretedValue']
+                item = slots['DeleteMenuItem']['value']['interpretedValue']
+                msg = "Successfully deleted the " + item + " from the menu of the "  + restaurant + " in " + location
+            elif (intent == 'AddMenu'):
+                location=slots['AddMenuLocation']['value']['interpretedValue'] 
+                restaurant = slots['AddMenuRestaurant']['value']['interpretedValue']
+                item = slots['AddMenuItem']['value']['interpretedValue']
+                msg = "Successfully added the " + item + " in the menu of the "  + restaurant + " in " + location
+            elif (intent == 'ShowRestaurantLocations'):
+                msg = "The Restaurants in Patiala are available at following locations: "
+                for row in myresult:
+                    data = data + row[0] +"\n"
+                msg = msg + data
+        else:
+            if (duplicateCounter != 0):
+                msg = "Exception: You are trying to add dulicate Menu Item"
+            else:
+                msg = "Invalid input, please try again"
+                    
+                
+               
+        response = {
+            "sessionState": {
+                "dialogAction": {
+                    "type": "Close"
+                    },
+                    "intent": {
+                    'name':intent,
+                    'slots': slots,
+                    'state':'Fulfilled'
+                    }
+                },
+                "messages": [
+                    {
+                        "contentType": "PlainText", 
+                        #"content": "The restaurant list is " + data
+                        "content": msg
+                    }
+                ]
+            }
+        return response  
+        
+            
